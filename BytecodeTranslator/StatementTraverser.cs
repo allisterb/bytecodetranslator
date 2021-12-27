@@ -12,13 +12,10 @@ using Microsoft.Cci;
 using Microsoft.Cci.MetadataReader;
 using Microsoft.Cci.MutableCodeModel;
 using Microsoft.Cci.Contracts;
-using Microsoft.Cci.ILToCodeModel;
+//using Microsoft.Cci.ILToCodeModel;
 
 using Bpl = Microsoft.Boogie;
 using System.Diagnostics.Contracts;
-using TranslationPlugins;
-using BytecodeTranslator.Phone;
-
 
 namespace BytecodeTranslator
 {
@@ -389,7 +386,8 @@ namespace BytecodeTranslator
 
 
       // FEEDBACK TODO extract into a method
-      if (PhoneCodeHelper.instance().PhoneFeedbackToggled) {
+      /*
+        if (PhoneCodeHelper.instance().PhoneFeedbackToggled) {
         IMethodDefinition methodTranslated = sink.getMethodBeingTranslated();
         if (methodTranslated != null && PhoneCodeHelper.instance().isMethodInputHandlerOrFeedbackOverride(methodTranslated) &&
             !PhoneCodeHelper.instance().isMethodIgnoredForFeedback(methodTranslated)) {
@@ -397,7 +395,7 @@ namespace BytecodeTranslator
           StmtBuilder.Add(falseAssertion);
         }
       }
-
+      */
       StmtBuilder.Add(new Bpl.ReturnCmd(returnStatement.Token()));
     }
     #endregion
@@ -477,6 +475,7 @@ namespace BytecodeTranslator
       if (count == 0) {
         // FEEDBACK TODO unfortunately return statements are created here too 
         // FEEDBACK TODO extract into a method
+        /*
         if (PhoneCodeHelper.instance().PhoneFeedbackToggled) {
           IMethodDefinition methodTranslated = sink.getMethodBeingTranslated();
           if (methodTranslated != null && PhoneCodeHelper.instance().isMethodInputHandlerOrFeedbackOverride(methodTranslated) &&
@@ -485,7 +484,7 @@ namespace BytecodeTranslator
             builder.Add(falseAssertion);
           }
         }
-
+        */
         builder.Add(new Bpl.ReturnCmd(Bpl.Token.NoToken));
       }
       else {

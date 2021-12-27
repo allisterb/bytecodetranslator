@@ -17,9 +17,6 @@ using Microsoft.Cci.ILToCodeModel;
 
 using Bpl = Microsoft.Boogie;
 using System.Diagnostics.Contracts;
-using TranslationPlugins;
-using BytecodeTranslator.Phone;
-
 
 namespace BytecodeTranslator
 {
@@ -459,7 +456,7 @@ namespace BytecodeTranslator
             break;
           }
         case PrimitiveTypeCode.Int64: {
-            var lit = Bpl.Expr.Literal(Microsoft.Basetypes.BigNum.FromLong((long)constant.Value));
+            var lit = Bpl.Expr.Literal(Microsoft.BaseTypes.BigNum.FromLong((long)constant.Value));
             lit.Type = Bpl.Type.Int;
             TranslatedExpressions.Push(lit);
             break;
@@ -483,7 +480,7 @@ namespace BytecodeTranslator
             break;
           }
         case PrimitiveTypeCode.UInt64: {
-            var lit = Bpl.Expr.Literal(Microsoft.Basetypes.BigNum.FromULong((ulong)constant.Value));
+            var lit = Bpl.Expr.Literal(Microsoft.BaseTypes.BigNum.FromULong((ulong)constant.Value));
             lit.Type = Bpl.Type.Int;
             TranslatedExpressions.Push(lit);
             break;
@@ -755,21 +752,7 @@ namespace BytecodeTranslator
         }
       } finally {
         // TODO move away phone related code from the translation, it would be better to have 2 or more translation phases
-        if (PhoneCodeHelper.instance().PhonePlugin != null) {
-          if (PhoneCodeHelper.instance().PhoneNavigationToggled) {
-            if (PhoneCodeHelper.instance().isNavigationCall(methodCall)) {
-              Bpl.AssignCmd assignCmd = PhoneCodeHelper.instance().createBoogieNavigationUpdateCmd(sink);
-              this.StmtTraverser.StmtBuilder.Add(assignCmd);
-            }
-          }
-
-          if (PhoneCodeHelper.instance().PhoneFeedbackToggled) {
-            if (PhoneCodeHelper.instance().isMethodKnownUIChanger(methodCall)) {
-              Bpl.AssumeCmd assumeFalse = new Bpl.AssumeCmd(Bpl.Token.NoToken, Bpl.LiteralExpr.False);
-              this.StmtTraverser.StmtBuilder.Add(assumeFalse);
-            }
-          }
-        }
+        
       }
     }
 
@@ -993,19 +976,7 @@ namespace BytecodeTranslator
 
       bool translationIntercepted= false;
       ICompileTimeConstant constant= assignment.Source as ICompileTimeConstant;
-      // TODO move away phone related code from the translation, it would be better to have 2 or more translation phases
-      // NAVIGATION TODO maybe this will go away if I can handle it with stubs
-      if (PhoneCodeHelper.instance().PhonePlugin != null && PhoneCodeHelper.instance().PhoneNavigationToggled) {
-        IFieldReference target = assignment.Target.Definition as IFieldReference;
-        if (target != null && target.Name.Value == PhoneCodeHelper.IL_CURRENT_NAVIGATION_URI_VARIABLE) {
-          if (constant != null && constant.Type == sink.host.PlatformType.SystemString && constant.Value != null &&
-              constant.Value.Equals(PhoneCodeHelper.BOOGIE_DO_HAVOC_CURRENTURI)) {
-            TranslateHavocCurrentURI();
-            translationIntercepted = true;
-          }
-          StmtTraverser.StmtBuilder.Add(PhoneCodeHelper.instance().getAddNavigationCheck(sink));
-        }
-      }
+
 
       if (!translationIntercepted)
         TranslateAssignment(tok, assignment.Target.Definition, assignment.Target.Instance, assignment.Source);
@@ -1014,13 +985,7 @@ namespace BytecodeTranslator
     /// <summary>
     /// Patch, to account for URIs that cannot be tracked because of current dataflow restrictions
     /// </summary>
-    private void TranslateHavocCurrentURI() {
-      // TODO move away phone related code from the translation, it would be better to have 2 or more translation phases
-      IMethodReference havocMethod= PhoneCodeHelper.instance().getUriHavocerMethod(sink);
-      Sink.ProcedureInfo procInfo= sink.FindOrCreateProcedure(havocMethod.ResolvedMethod);
-      Bpl.CallCmd havocCall = new Bpl.CallCmd(Bpl.Token.NoToken, procInfo.Decl.Name, new List<Bpl.Expr>(), new List<Bpl.IdentifierExpr>());
-      StmtTraverser.StmtBuilder.Add(havocCall);
-    }
+    
 
     /// <summary>
     /// Handles "instance.container := source".

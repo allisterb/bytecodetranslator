@@ -14,8 +14,6 @@ using Microsoft.Cci.MutableCodeModel;
 using Microsoft.Cci.Contracts;
 using Microsoft.Cci.ILToCodeModel;
 
-using TranslationPlugins;
-
 using Bpl = Microsoft.Boogie;
 using BytecodeTranslator.TranslationPlugins;
 
