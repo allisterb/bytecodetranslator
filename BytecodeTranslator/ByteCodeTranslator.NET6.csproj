@@ -6,55 +6,15 @@
 
   <ItemGroup>
     <PackageReference Include="Boogie.ExecutionEngine" Version="2.11.1" />
+    
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Microsoft.Cci.Analysis.ControlAndDataFlowGraph">
-      <HintPath>..\..\..\lib\net45\Microsoft.Cci\Microsoft.Cci.Analysis.ControlAndDataFlowGraph.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Cci.CodeModel">
-      <HintPath>..\..\..\lib\net45\Microsoft.Cci\Microsoft.Cci.CodeModel.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Cci.CodeModelToIL">
-      <HintPath>..\..\..\lib\net45\Microsoft.Cci\Microsoft.Cci.CodeModelToIL.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Cci.ContractExtractor">
-      <HintPath>..\..\..\lib\net45\Microsoft.Cci\Microsoft.Cci.ContractExtractor.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Cci.ILGenerator">
-      <HintPath>..\..\..\lib\net45\Microsoft.Cci\Microsoft.Cci.ILGenerator.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Cci.MetadataHelper">
-      <HintPath>..\..\..\lib\net45\Microsoft.Cci\Microsoft.Cci.MetadataHelper.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Cci.MetadataModel">
-      <HintPath>..\..\..\lib\net45\Microsoft.Cci\Microsoft.Cci.MetadataModel.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Cci.MutableCodeModel">
-      <HintPath>..\..\..\lib\net45\Microsoft.Cci\Microsoft.Cci.MutableCodeModel.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Cci.MutableMetadataModel">
-      <HintPath>..\..\..\lib\net45\Microsoft.Cci\Microsoft.Cci.MutableMetadataModel.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Cci.NewILToCodeModel">
-      <HintPath>..\..\..\lib\net45\Microsoft.Cci\Microsoft.Cci.NewILToCodeModel.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Cci.PdbReader">
-      <HintPath>..\..\..\lib\net45\Microsoft.Cci\Microsoft.Cci.PdbReader.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Cci.PdbWriter">
-      <HintPath>..\..\..\lib\net45\Microsoft.Cci\Microsoft.Cci.PdbWriter.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Cci.PeReader">
-      <HintPath>..\..\..\lib\net45\Microsoft.Cci\Microsoft.Cci.PeReader.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Cci.PeWriter">
-      <HintPath>..\..\..\lib\net45\Microsoft.Cci\Microsoft.Cci.PeWriter.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Cci.SourceModel">
-      <HintPath>..\..\..\lib\net45\Microsoft.Cci\Microsoft.Cci.SourceModel.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\cci-bct\NET6\Microsoft.Cci\Microsoft.Cci.NET6.csproj" />
   </ItemGroup>
+
+     
+
  
 
 </Project>

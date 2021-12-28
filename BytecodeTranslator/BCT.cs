@@ -12,8 +12,8 @@ using Microsoft.Cci.MetadataReader;
 using Microsoft.Cci.MutableCodeModel;
 using System.Collections.Generic;
 using Microsoft.Cci.Contracts;
-using Microsoft.Cci.ILToCodeModel;
 using Microsoft.Cci.MutableContracts;
+using Microsoft.Cci.ILToCodeModel;
 
 using Bpl = Microsoft.Boogie;
 using System.Diagnostics.Contracts;
@@ -28,7 +28,7 @@ namespace BytecodeTranslator {
 
     public static IMetadataHost Host;
 
-    static int Main(string[] args)
+    public static int Main(params string[] args)
     {
       int errorReturnValue = -1;
 
@@ -260,7 +260,7 @@ namespace BytecodeTranslator {
         string pdbFile = Path.ChangeExtension(m.Location, "pdb");
         if (File.Exists(pdbFile)) {
           Stream pdbStream = File.OpenRead(pdbFile);
-          pdbReader = new PdbReader(pdbStream, host);
+          pdbReader = new PdbReader(m.Location, pdbFile, host,true); //Use portable PDB.
         }
         var m2 = Decompiler.GetCodeModelFromMetadataModel(host, m, pdbReader, DecompilerOptions.Unstack) as IModule;
         // The decompiler does not turn calls to Assert/Assume into Code Model nodes

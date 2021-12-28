@@ -13,7 +13,6 @@ using Microsoft.Cci;
 using Microsoft.Cci.MetadataReader;
 using Microsoft.Cci.MutableCodeModel;
 using Microsoft.Cci.Contracts;
-using Microsoft.Cci.ILToCodeModel;
 
 using Bpl = Microsoft.Boogie;
 using System.Diagnostics.Contracts;

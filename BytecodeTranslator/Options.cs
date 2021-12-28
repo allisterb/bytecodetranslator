@@ -12,7 +12,7 @@ using Microsoft.Cci.MetadataReader;
 using Microsoft.Cci.MutableCodeModel;
 using System.Collections.Generic;
 using Microsoft.Cci.Contracts;
-using Microsoft.Cci.ILToCodeModel;
+
 using Microsoft.Cci.MutableContracts;
 
 using Bpl = Microsoft.Boogie;
