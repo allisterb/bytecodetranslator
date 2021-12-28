@@ -259,8 +259,7 @@ namespace BytecodeTranslator {
         PdbReader/*?*/ pdbReader = null;
         string pdbFile = Path.ChangeExtension(m.Location, "pdb");
         if (File.Exists(pdbFile)) {
-          Stream pdbStream = File.OpenRead(pdbFile);
-          pdbReader = new PdbReader(m.Location, pdbFile, host,true); //Use portable PDB.
+          pdbReader = new PdbReader(m.Location, pdbFile, host,true); //Use portable PDB reader.
         }
         var m2 = Decompiler.GetCodeModelFromMetadataModel(host, m, pdbReader, DecompilerOptions.Unstack) as IModule;
         // The decompiler does not turn calls to Assert/Assume into Code Model nodes
@@ -285,8 +284,7 @@ namespace BytecodeTranslator {
           PdbReader/*?*/ pdbReader = null;
           string pdbFile = Path.ChangeExtension(module.Location, "pdb");
           if (File.Exists(pdbFile)) {
-            Stream pdbStream = File.OpenRead(pdbFile);
-            pdbReader = new PdbReader(pdbStream, host);
+            pdbReader = new PdbReader(module.Location, pdbFile, host, true); //use portable PDB reader.
           }
           module = Decompiler.GetCodeModelFromMetadataModel(host, module, pdbReader, DecompilerOptions.Unstack) as IModule;
 
