@@ -79,7 +79,6 @@ namespace BytecodeTranslator {
       bool whiteList = false;
       if (!String.IsNullOrWhiteSpace(options.exemptionFile)) {
         int i = 0;
-        exemptionList = new List<Regex>();
         string fileName = options.exemptionFile;
         var c = fileName[fileName.Length - 1];
         whiteList = true;
@@ -373,34 +372,41 @@ namespace BytecodeTranslator {
 
       string outputFileName = primaryModule.Name + ".bpl";
       callPostTranslationTraversers(modules, sink, phoneControlsConfigFile, outputFileName);
-      
 
-      //sink.CreateIdentifierCorrespondenceTable(primaryModule.Name.Value);
+            /*
+            sink.CreateIdentifierCorrespondenceTable(primaryModule.Name.Value);
 
-      //var rc = new Bpl.ResolutionContext((Bpl.IErrorSink)null);
-      //foreach (var decl in sink.TranslatedProgram.TopLevelDeclarations) {
-      //  decl.Register(rc);
-      //}
-      //sink.TranslatedProgram.Resolve(rc);
-      //var goodDecls = new List<Bpl.Declaration>();
-      //var tc = new Bpl.TypecheckingContext(null);
-      //foreach (var decl in sink.TranslatedProgram.TopLevelDeclarations) {
-      //  var impl = decl as Bpl.Implementation;
-      //  if (impl == null) {
-      //    goodDecls.Add(decl);
-      //    continue;
-      //  }
-      //  try {
-      //    //var tc = new Bpl.TypecheckingContext(null);
-      //    impl.Typecheck(tc);
-      //    goodDecls.Add(impl);
-      //  } catch {
-      //    Console.WriteLine("Deleting implementation for: " + impl.Name);
-      //    // nothing to do, just continue
-      //  }
-      //}
-      //sink.TranslatedProgram.TopLevelDeclarations = goodDecls;
-      return sink.TranslatedProgram;
+            var rc = new Bpl.ResolutionContext((Bpl.IErrorSink)null);
+            foreach (var decl in sink.TranslatedProgram.TopLevelDeclarations)
+            {
+                decl.Register(rc);
+            }
+            sink.TranslatedProgram.Resolve(rc);
+            var goodDecls = new List<Bpl.Declaration>();
+            var tc = new Bpl.TypecheckingContext(null);
+            foreach (var decl in sink.TranslatedProgram.TopLevelDeclarations)
+            {
+                var impl = decl as Bpl.Implementation;
+                if (impl == null)
+                {
+                    goodDecls.Add(decl);
+                    continue;
+                }
+                try
+                {
+                    //var tc = new Bpl.TypecheckingContext(null);
+                    impl.Typecheck(tc);
+                    goodDecls.Add(impl);
+                }
+                catch
+                {
+                    Console.WriteLine("Deleting implementation for: " + impl.Name);
+                    // nothing to do, just continue
+                }
+            }
+            sink.TranslatedProgram.TopLevelDeclarations = goodDecls;
+            */
+            return sink.TranslatedProgram;
     }
 
 
