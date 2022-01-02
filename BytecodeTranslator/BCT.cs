@@ -22,10 +22,12 @@ using System.Text.RegularExpressions;
 using BytecodeTranslator.TranslationPlugins;
 using BytecodeTranslator.TranslationPlugins.BytecodeTranslator;
 
+using Grover;
 namespace BytecodeTranslator {
 
-  public class BCT {
+  public class BCT : Runtime {
 
+    
     public static IMetadataHost Host;
 
     public static int Main(params string[] args)
@@ -47,16 +49,16 @@ namespace BytecodeTranslator {
         var c = fileName[fileName.Length - 1];
         if (c == '+' || c == '-') fileName = options.exemptionFile.Remove(fileName.Length - 1);
         if (!File.Exists(fileName)) {
-          Console.WriteLine("Specified exemption file '{0}' not found.", fileName);
+          Info("Specified exemption file '{0}' not found.", fileName);
         }
       }
       if (options.stub != null) {
-        Console.WriteLine("/s is no longer used to specify stub assemblies");
+        Info("/s is no longer used to specify stub assemblies");
         return errorReturnValue;
       }
 
       if (options.modelExceptions == 1 && !options.wholeProgram) {
-        Console.WriteLine("can specify a precise modeling of exceptions only when doing whole program analysis");
+        Info("can specify a precise modeling of exceptions only when doing whole program analysis");
         return errorReturnValue;
       }
 
@@ -97,13 +99,13 @@ namespace BytecodeTranslator {
               exemptionList.Add(new Regex(line));
               i++;
             }
-            //Console.WriteLine("Read {0} lines from the exclusion file '{1}'.",
+            //Info("Read {0} lines from the exclusion file '{1}'.",
             //  i, options.exemptionFile);
           }
         } catch (Exception e) {
-          Console.WriteLine("Something went wrong reading the exclusion file '{0}'; read in {1} lines, continuing processing.",
+          Info("Something went wrong reading the exclusion file '{0}'; read in {1} lines, continuing processing.",
             fileName, i);
-          Console.WriteLine(e.Message);
+          Info(e.Message);
         }
       }
       #endregion
@@ -118,12 +120,12 @@ namespace BytecodeTranslator {
             heap = new GeneralHeap();
             break;
           default:
-            Console.WriteLine("Unknown setting for /heap");
+            Info("Unknown setting for /heap");
             return 1;
         }
 
         if ((options.phoneFeedbackCode || options.phoneNavigationCode) && (options.phoneControls == null || options.phoneControls == "")) {
-          Console.WriteLine("Options /phoneNavigationCode and /phoneFeedbackCode need /phoneControls option set.");
+          Info("Options /phoneNavigationCode and /phoneFeedbackCode need /phoneControls option set.");
           return 1;
         }
 
@@ -139,8 +141,8 @@ namespace BytecodeTranslator {
         return 0;
         // return Inline(outputFileName);
       } catch (Exception e) { // swallow everything and just return an error code
-        Console.WriteLine("The byte-code translator failed: {0}", e.Message);
-        // Console.WriteLine("Stack trace: {0}", e.StackTrace);
+        Info("The byte-code translator failed: {0}", e.Message);
+        // Info("Stack trace: {0}", e.StackTrace);
         return -1;
       }
     }
@@ -157,12 +159,12 @@ namespace BytecodeTranslator {
       Bpl.Parser.Parse(_bplFileName, new List<string>(), out program);
       int errorCount = program.Resolve();
       if (errorCount != 0) {
-        Console.WriteLine("{0} name resolution errors detected in {1}", errorCount, _bplFileName);
+        Info("{0} name resolution errors detected in {1}", errorCount, _bplFileName);
         return -1;
       }
       errorCount = program.Typecheck();
       if (errorCount != 0) {
-        Console.WriteLine("{0} type checking errors detected in {1}", errorCount, _bplFileName);
+        Info("{0} type checking errors detected in {1}", errorCount, _bplFileName);
         return -1;
       }
       bool inline = false;
@@ -215,8 +217,8 @@ namespace BytecodeTranslator {
         }
         return 0; // success
       } catch (Exception e) { // swallow everything and just return an error code
-        Console.WriteLine("The byte-code translator failed: {0}", e.Message);
-        // Console.WriteLine("Stack trace: {0}", e.StackTrace);
+        Info("The byte-code translator failed: {0}", e.Message);
+        // Info("Stack trace: {0}", e.StackTrace);
         return -1;
       }
     }
@@ -245,8 +247,8 @@ namespace BytecodeTranslator {
       foreach (var a in assemblyNames) {
         var module = host.LoadUnitFrom(a) as IModule;
         if (module == null || module == Dummy.Module || module == Dummy.Assembly) {
-          Console.WriteLine(a + " is not a PE file containing a CLR module or assembly, or an error occurred when loading it.");
-          Console.WriteLine("Skipping it, continuing with other input assemblies");
+          Info(a + " is not a PE file containing a CLR module or assembly, or an error occurred when loading it.");
+          Info("Skipping it, continuing with other input assemblies");
           continue;
         }
         modules.Add(module);
@@ -267,6 +269,7 @@ namespace BytecodeTranslator {
         host.RegisterAsLatest(m2);
         contractExtractors.Add(m2, host.GetContractExtractor(m2.UnitIdentity));
         pdbReaders.Add(m2, pdbReader);
+        Info("Module {0} has assembly references {1}.", m.ModuleName.Value, m.AssemblyReferences.Select(a => a.ResolvedAssembly.Name.Value));
       }
       modules = decompiledModules;
       #endregion
@@ -277,8 +280,8 @@ namespace BytecodeTranslator {
         foreach (var s in stubAssemblies) {
           var module = host.LoadUnitFrom(s) as IModule;
           if (module == null || module == Dummy.Module || module == Dummy.Assembly) {
-            Console.WriteLine(s + " is not a PE file containing a CLR module or assembly, or an error occurred when loading it.");
-            Console.WriteLine("Skipping it, continuing with other input assemblies");
+            Info(s + " is not a PE file containing a CLR module or assembly, or an error occurred when loading it.");
+            Info("Skipping it, continuing with other input assemblies");
           }
           PdbReader/*?*/ pdbReader = null;
           string pdbFile = Path.ChangeExtension(module.Location, "pdb");
@@ -400,7 +403,7 @@ namespace BytecodeTranslator {
                 }
                 catch
                 {
-                    Console.WriteLine("Deleting implementation for: " + impl.Name);
+                    Info("Deleting implementation for: " + impl.Name);
                     // nothing to do, just continue
                 }
             }

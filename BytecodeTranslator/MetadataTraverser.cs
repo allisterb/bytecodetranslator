@@ -17,6 +17,7 @@ using Bpl = Microsoft.Boogie;
 using System.Diagnostics.Contracts;
 using BytecodeTranslator.TranslationPlugins;
 
+using Grover;
 namespace BytecodeTranslator {
 
   /// <summary>
@@ -536,9 +537,9 @@ namespace BytecodeTranslator {
 
                 if (!(te.Message.StartsWith("UnresolvedMethod") && te.Message.EndsWith(".ctor")))
                 {
-                    Console.WriteLine("Translation error in body of \n    '{0}':",
-                    MemberHelper.GetMethodSignature(method, NameFormattingOptions.None));
-                    Console.WriteLine("\t" + te.Message);
+                    Runtime.Error("Translation error in body of \n    '{0}:{1}':",
+                    MemberHelper.GetMethodSignature(method, NameFormattingOptions.None),
+                    "\t" + te.Message);
                 }
       } catch (Exception e) {
         Console.WriteLine("Error encountered during translation of \n    '{0}':",

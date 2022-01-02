@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Grover.Base\Grover.Base.csproj" />
     <ProjectReference Include="..\..\cci-bct\NET6\Microsoft.Cci\Microsoft.Cci.NET6.csproj" />
   </ItemGroup>
 
